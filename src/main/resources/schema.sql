@@ -14,12 +14,13 @@ CREATE TABLE Championship
 
 CREATE TABLE Match
 (
+    id              INT AUTO_INCREMENT PRIMARY KEY,
     home_team       VARCHAR(64) NOT NULL,
     away_team       VARCHAR(64) NOT NULL,
     championship_id INT         NOT NULL,
     date_time       DATETIME    NOT NULL,
 
-    CONSTRAINT pk_match PRIMARY KEY (home_team, away_team, championship_id, date_time),
+    CONSTRAINT pk_match PRIMARY KEY (id),
 
     CONSTRAINT fk_match_home_team FOREIGN KEY (home_team)
         REFERENCES Team (name)
