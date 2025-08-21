@@ -10,17 +10,17 @@ public class MatchId implements Serializable {
     private String homeTeam;
     private String awayTeam;
     private Integer championship;
-    private LocalDateTime date;
+    private LocalDateTime dateTime;
 
     // Constructors
     public MatchId() {
     }
 
-    public MatchId(String homeTeam, String awayTeam, Integer championship, LocalDateTime date) {
+    public MatchId(String homeTeam, String awayTeam, Integer championship, LocalDateTime dateTime) {
         this.homeTeam = homeTeam;
         this.awayTeam = awayTeam;
         this.championship = championship;
-        this.date = date;
+        this.dateTime = dateTime;
     }
 
     // Equals and HashCode
@@ -32,11 +32,11 @@ public class MatchId implements Serializable {
         return Objects.equals(homeTeam, matchId.homeTeam) &&
                 Objects.equals(awayTeam, matchId.awayTeam) &&
                 Objects.equals(championship, matchId.championship) &&
-                Objects.equals(date, matchId.date);
+                Objects.equals(dateTime, matchId.dateTime);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(homeTeam, awayTeam, championship, date);
+        return Objects.hash(homeTeam, awayTeam, championship, dateTime);
     }
 }

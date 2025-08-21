@@ -6,6 +6,7 @@ import mmarini.unitn.team04_rest.repository.MatchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +26,7 @@ public class MatchService {
      *
      * @return Map with Championship as key and a nested Map of dates and match lists as value
      */
-    public Map<Integer, Map<LocalDateTime, List<Match>>> getAllChampionshipsCalendar() {
+    public Map<Integer, Map<LocalDate, List<Match>>> getAllChampionshipsCalendar() {
         return matchRepository.getCalendarOfAllChampionships();
     }
 

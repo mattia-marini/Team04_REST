@@ -3,6 +3,7 @@ package mmarini.unitn.team04_rest.model;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Check;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -27,17 +28,17 @@ public class Match {
 
     @Id
     @Column(nullable = false)
-    private LocalDateTime date;
+    private LocalDateTime dateTime;
 
     // Constructors
     public Match() {
     }
 
-    public Match(Team homeTeam, Team awayTeam, Championship championship, LocalDateTime date) {
+    public Match(Team homeTeam, Team awayTeam, Championship championship, LocalDateTime dateTime) {
         this.homeTeam = homeTeam;
         this.awayTeam = awayTeam;
         this.championship = championship;
-        this.date = date;
+        this.dateTime = dateTime;
     }
 
     // Getters and Setters
@@ -65,11 +66,15 @@ public class Match {
         this.championship = championship;
     }
 
-    public LocalDateTime getDate() {
-        return date;
+    public LocalDateTime getDateTime() {
+        return dateTime;
     }
 
-    public void setDate(LocalDateTime date) {
-        this.date = date;
+    public void setDateTime(LocalDateTime date) {
+        this.dateTime = date;
+    }
+
+    public LocalDate getDate() {
+        return dateTime.toLocalDate();
     }
 }

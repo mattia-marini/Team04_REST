@@ -3,6 +3,7 @@ package mmarini.unitn.team04_rest.repository;
 import mmarini.unitn.team04_rest.model.Championship;
 import mmarini.unitn.team04_rest.model.Match;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +15,7 @@ public interface MatchRepositoryCustom {
      *
      * @return Map with Championship as key and a nested Map of dates and match lists as value
      */
-    Map<Integer, Map<LocalDateTime, List<Match>>> getCalendarOfAllChampionships();
+    Map<Integer, Map<LocalDate, List<Match>>> getCalendarOfAllChampionships();
 
     /**
      * Extract the calendar of matches of a specified championship

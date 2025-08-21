@@ -7,6 +7,7 @@ import jakarta.persistence.TypedQuery;
 import mmarini.unitn.team04_rest.model.Championship;
 import mmarini.unitn.team04_rest.model.Match;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -18,8 +19,8 @@ public class MatchRepositoryCustomImpl implements MatchRepositoryCustom {
     private EntityManager entityManager;
 
     @Override
-    public Map<Integer, Map<LocalDateTime, List<Match>>> getCalendarOfAllChampionships() {
-        TypedQuery<Match> query = entityManager.createQuery("SELECT m FROM Match m ORDER BY m.championship.id, m.date, m.homeTeam.name", Match.class);
+    public Map<Integer, Map<LocalDate, List<Match>>> getCalendarOfAllChampionships() {
+        TypedQuery<Match> query = entityManager.createQuery("SELECT m FROM Match m ORDER BY m.championship.id, m.dateTime, m.homeTeam.name", Match.class);
         List<Match> matches = query.getResultList();
 
         return matches.stream()
@@ -31,25 +32,44 @@ public class MatchRepositoryCustomImpl implements MatchRepositoryCustom {
 
     @Override
     public Map<LocalDateTime, List<Match>> getCalendarOfChampionship(Championship championship) {
-        TypedQuery<Match> query = entityManager.createQuery("SELECT m FROM Match m WHERE m.championship = :championship ORDER BY m.date, m.homeTeam.name", Match.class);
+        TypedQuery<Match> query = entityManager.createQuery("SELECT m FROM Match m WHERE m.championship = :championship ORDER BY m.dateTime, m.homeTeam.name", Match.class);
         query.setParameter("championship", championship);
         List<Match> matches = query.getResultList();
 
-        return matches.stream().collect(Collectors.groupingBy(Match::getDate));
+        return matches.stream().collect(Collectors.groupingBy(Match::getDateTime));
     }
 
     @Override
     public List<Match> getMatchesByDate(LocalDateTime date) {
-        TypedQuery<Match> query = entityManager.createQuery("SELECT m FROM Match m WHERE m.date = :date ORDER BY m.championship.id, m.homeTeam.name", Match.class);
-        query.setParameter("date", date);
+        LocalDateTime startOfDay = date.toLocalDate().atStartOfDay();
+        LocalDateTime endOfDay = startOfDay.plusDays(1);
+
+        TypedQuery<Match> query = entityManager.createQuery(
+                "SELECT m FROM Match m " +
+                        "WHERE m.dateTime >= :startOfDay AND m.dateTime < :endOfDay " +
+                        "ORDER BY m.championship.id, m.homeTeam.name", Match.class);
+
+        query.setParameter("startOfDay", startOfDay);
+        query.setParameter("endOfDay", endOfDay);
+
         return query.getResultList();
     }
 
     @Override
     public List<Match> getMatchesByChampionshipAndDate(Championship championship, LocalDateTime date) {
-        TypedQuery<Match> query = entityManager.createQuery("SELECT m FROM Match m WHERE m.championship = :championship AND m.date = :date ORDER BY m.homeTeam.name", Match.class);
+        LocalDateTime startOfDay = date.toLocalDate().atStartOfDay();
+        LocalDateTime endOfDay = startOfDay.plusDays(1);
+
+        TypedQuery<Match> query = entityManager.createQuery(
+                "SELECT m FROM Match m " +
+                        "WHERE m.championship = :championship " +
+                        "AND m.dateTime >= :startOfDay AND m.dateTime < :endOfDay " +
+                        "ORDER BY m.homeTeam.name", Match.class);
+
         query.setParameter("championship", championship);
-        query.setParameter("date", date);
+        query.setParameter("startOfDay", startOfDay);
+        query.setParameter("endOfDay", endOfDay);
+
         return query.getResultList();
     }
 }
