@@ -78,6 +78,44 @@ public class MatchController {
     }
 
     /**
+     * Get matches for a specific date and championship, with simulated results
+     *
+     * @param date           the date to filter matches (format: yyyy-MM-dd)
+     * @param championshipId the ID of the championship
+     * @return Map with matchId as key and simulated result as value
+     */
+    @GetMapping("/calendar/results/{date}/{championshipId}")
+    public ResponseEntity<Map<Integer, Integer>> getMatchesResultsByDateAndChampionship(
+            @PathVariable("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @PathVariable("championshipId") Integer championshipId) {
+
+        // Get all matches for that date
+        Map<Integer, List<Match>> matches = matchService.getMatchesByDate(date);
+
+        // Filter only the requested championship
+        List<Match> championshipMatches = matches.getOrDefault(championshipId, List.of());
+
+        // Build result map (matchId -> result)
+        Map<Integer, Integer> results = championshipMatches.stream()
+                .collect(Collectors.toMap(
+                        Match::getId,
+                        m -> {
+                            Random random = new Random();
+                            int p1 = m.getHomeTeam().getStrength() + random.nextInt(-8, 9);
+                            int p2 = m.getAwayTeam().getStrength() + random.nextInt(-8, 9);
+                            if (p1 < p2 - 3) return 1;  // away win
+                            else if (p2 < p1 - 3) return 2; // home win
+                            else return 0; // draw
+                        }
+                ));
+
+        return ResponseEntity.ok(results);
+    }
+
+
+    //Unused endpoints
+
+    /**
      * Get the calendar of matches for a specific championship
      *
      * @param championshipId the ID of the championship to get the calendar for
