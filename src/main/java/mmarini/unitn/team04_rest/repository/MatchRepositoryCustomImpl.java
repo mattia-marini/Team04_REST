@@ -40,19 +40,23 @@ public class MatchRepositoryCustomImpl implements MatchRepositoryCustom {
     }
 
     @Override
-    public List<Match> getMatchesByDate(LocalDateTime date) {
-        LocalDateTime startOfDay = date.toLocalDate().atStartOfDay();
-        LocalDateTime endOfDay = startOfDay.plusDays(1);
-
+    public Map<Integer, List<Match>> getMatchesByDate(LocalDate date) {
         TypedQuery<Match> query = entityManager.createQuery(
                 "SELECT m FROM Match m " +
-                        "WHERE m.dateTime >= :startOfDay AND m.dateTime < :endOfDay " +
-                        "ORDER BY m.championship.id, m.homeTeam.name", Match.class);
+                        "WHERE m.dateTime >= :start AND m.dateTime < :end " +
+                        "ORDER BY m.championship.id, m.dateTime, m.homeTeam.name",
+                Match.class
+        );
 
-        query.setParameter("startOfDay", startOfDay);
-        query.setParameter("endOfDay", endOfDay);
+        query.setParameter("start", date.atStartOfDay());
+        query.setParameter("end", date.plusDays(1).atStartOfDay());
 
-        return query.getResultList();
+        List<Match> matches = query.getResultList();
+
+        return matches.stream()
+                .collect(Collectors.groupingBy(
+                        match -> match.getChampionship().getId()
+                ));
     }
 
     @Override
@@ -72,4 +76,6 @@ public class MatchRepositoryCustomImpl implements MatchRepositoryCustom {
 
         return query.getResultList();
     }
+
+
 }

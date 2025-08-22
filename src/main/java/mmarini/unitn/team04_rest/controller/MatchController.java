@@ -40,6 +40,17 @@ public class MatchController {
     }
 
     /**
+     * Get matches for a specific date, grouped by championship ID
+     *
+     * @param date the date to filter matches (format: yyyy-MM-dd)
+     * @return Map with Championship ID as key and list of matches as value
+     */
+    @GetMapping("/calendar/{date}")
+    public ResponseEntity<Map<Integer, List<Match>>> getMatchesByDate(@PathVariable("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        return ResponseEntity.ok(matchService.getMatchesByDate(date));
+    }
+
+    /**
      * Get the calendar of matches for a specific championship
      *
      * @param championshipId the ID of the championship to get the calendar for
@@ -51,18 +62,6 @@ public class MatchController {
         Championship championship = championshipRepository.findById(championshipId)
                 .orElseThrow(() -> new ResourceNotFoundException("Championship not found with id: " + championshipId));
         return ResponseEntity.ok(matchService.getChampionshipCalendar(championship));
-    }
-
-    /**
-     * Get matches across all championships for a specific date
-     *
-     * @param date the date to get matches for (format: yyyy-MM-dd'T'HH:mm:ss)
-     * @return List of matches on the specified date
-     */
-    @GetMapping("/by-date")
-    public ResponseEntity<List<Match>> getMatchesByDate(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date) {
-        return ResponseEntity.ok(matchService.getMatchesByDate(date));
     }
 
     /**

@@ -29,9 +29,9 @@ public interface MatchRepositoryCustom {
      * Extract the matches of all championships in the specified date
      *
      * @param date the date to get matches for
-     * @return List of matches on the specified date across all championships
+     * @return Map of matches on the specified date across all championships
      */
-    List<Match> getMatchesByDate(LocalDateTime date);
+    Map<Integer, List<Match>> getMatchesByDate(LocalDate date);
 
     /**
      * Extract the matches of a specified championship in the specified date

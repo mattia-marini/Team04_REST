@@ -46,7 +46,7 @@ public class MatchService {
      * @param date the date to get matches for
      * @return List of matches on the specified date
      */
-    public List<Match> getMatchesByDate(LocalDateTime date) {
+    public Map<Integer, List<Match>> getMatchesByDate(LocalDate date) {
         return matchRepository.getMatchesByDate(date);
     }
 
