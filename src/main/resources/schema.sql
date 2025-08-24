@@ -36,3 +36,9 @@ CREATE TABLE Match
 
     CONSTRAINT ck_match_teams CHECK (home_team <> away_team)
 );
+
+CREATE TABLE championship_new
+(
+    id          INT AUTO_INCREMENT PRIMARY KEY,
+    description VARCHAR(128) NOT NULL
+);

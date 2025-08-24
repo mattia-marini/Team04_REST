@@ -44,7 +44,22 @@ VALUES ('Real Madrid', 'Barcelona', 3, '2025-08-14 20:30:00'),
        ('Bayern Munich', 'Liverpool', 3, '2025-08-14 21:15:00'),
        ('Manchester United', 'Chelsea', 3, '2025-08-15 19:45:00'),
        ('Juventus', 'PSG', 3, '2025-08-15 21:00:00'),
-       ('Barcelona', 'Bayern Munich', 3, '2025-11-10 20:00:00'),
+       ('Barcelona', 'Bayern Munich', 3, '2025-10-23 20:00:00'),
        ('Liverpool', 'Manchester United', 3, '2025-11-10 21:00:00'),
        ('Chelsea', 'Juventus', 3, '2025-11-11 19:30:00'),
        ('PSG', 'Real Madrid', 3, '2025-11-11 21:00:00');
+
+
+-- Random news
+INSERT INTO championship_new (description)
+VALUES ('Nessuna new. Nulla di nuovo!'),
+       ('La squadra A conquista una vittoria importante nella terza giornata di campionato.'),
+       ('Il derby cittadino si conclude con un pareggio spettacolare ricco di emozioni.'),
+       ('Il capitano della squadra B annuncia il rinnovo del contratto fino al 2027.'),
+       ('Una giovane promessa segna il suo primo gol in Serie maggiore e trascina la squadra alla vittoria.'),
+       ('La partita tra C e D è stata rinviata a causa delle condizioni meteo avverse.'),
+       ('La squadra E mette a segno un record di imbattibilità: 10 partite senza sconfitte.'),
+       ('Il nuovo allenatore della squadra F debutta con una vittoria schiacciante.'),
+       ('La finale di coppa sarà disputata allo stadio Olimpico il prossimo 15 maggio.'),
+       ('Grande prestazione del portiere della squadra G che para due rigori decisivi.'),
+       ('Il campionato entra nel vivo: solo 3 punti separano le prime quattro squadre.');
