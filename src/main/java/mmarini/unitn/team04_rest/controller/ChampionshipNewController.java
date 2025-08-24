@@ -16,7 +16,7 @@ public class ChampionshipNewController {
         this.championshipNewRepository = championshipNewRepository;
     }
 
-    @GetMapping("/news")
+    @GetMapping("/api/news")
     public ChampionshipNew getRandomNew() {
         return championshipNewRepository.findRandomNew();
     }
