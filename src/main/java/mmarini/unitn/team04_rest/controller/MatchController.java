@@ -4,7 +4,7 @@ package mmarini.unitn.team04_rest.controller;
 import mmarini.unitn.team04_rest.model.Championship;
 import mmarini.unitn.team04_rest.model.Match;
 import mmarini.unitn.team04_rest.model.ResourceNotFoundException;
-import mmarini.unitn.team04_rest.repository.ChampionshipRepository;
+import mmarini.unitn.team04_rest.service.ChampionshipService;
 import mmarini.unitn.team04_rest.service.MatchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -23,13 +23,14 @@ import java.util.stream.Collectors;
 public class MatchController {
 
     private final MatchService matchService;
-    private final ChampionshipRepository championshipRepository;
+    private final ChampionshipService championshipService;
 
     @Autowired
-    public MatchController(MatchService matchService, ChampionshipRepository championshipRepository) {
+    public MatchController(MatchService matchService, ChampionshipService championshipService) {
         this.matchService = matchService;
-        this.championshipRepository = championshipRepository;
+        this.championshipService = championshipService;
     }
+
 
     /**
      * Get a calendar of all championships with matches grouped by date
@@ -89,13 +90,8 @@ public class MatchController {
             @PathVariable("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
             @PathVariable("championshipId") Integer championshipId) {
 
-        // Get all matches for that date
         Map<Integer, List<Match>> matches = matchService.getMatchesByDate(date);
-
-        // Filter only the requested championship
         List<Match> championshipMatches = matches.getOrDefault(championshipId, List.of());
-
-        // Build result map (matchId -> result)
         Map<Integer, Integer> results = championshipMatches.stream()
                 .collect(Collectors.toMap(
                         Match::getId,
@@ -123,7 +119,7 @@ public class MatchController {
      */
     @GetMapping("/calendar/championship/{championshipId}")
     public ResponseEntity<Map<LocalDateTime, List<Match>>> getChampionshipCalendar(@PathVariable Integer championshipId) {
-        Championship championship = championshipRepository.findById(championshipId).orElseThrow(() -> new ResourceNotFoundException("Championship not found with id: " + championshipId));
+        Championship championship = championshipService.getChampionshipById(championshipId).orElseThrow(() -> new ResourceNotFoundException("Championship not found with id: " + championshipId));
         return ResponseEntity.ok(matchService.getChampionshipCalendar(championship));
     }
 
@@ -136,7 +132,7 @@ public class MatchController {
      */
     @GetMapping("/championship/{championshipId}/by-date")
     public ResponseEntity<List<Match>> getMatchesByChampionshipAndDate(@PathVariable Integer championshipId, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date) {
-        Championship championship = championshipRepository.findById(championshipId).orElseThrow(() -> new ResourceNotFoundException("Championship not found with id: " + championshipId));
+        Championship championship = championshipService.getChampionshipById(championshipId).orElseThrow(() -> new ResourceNotFoundException("Championship not found with id: " + championshipId));
         return ResponseEntity.ok(matchService.getMatchesByChampionshipAndDate(championship, date));
     }
 }

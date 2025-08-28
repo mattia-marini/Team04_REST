@@ -6,6 +6,6 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface ChampionshipNewRepository extends CrudRepository<ChampionshipNew, Integer> {
 
-    @Query(value = "SELECT * FROM championship_new ORDER BY RAND() LIMIT 1", nativeQuery = true)
+    @Query(value = "SELECT * FROM CHAMPIONSHIP_NEW ORDER BY RAND() LIMIT 1", nativeQuery = true)
     ChampionshipNew findRandomNew();
 }

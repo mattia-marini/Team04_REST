@@ -1,7 +1,8 @@
 package mmarini.unitn.team04_rest.controller;
 
 import mmarini.unitn.team04_rest.model.Team;
-import mmarini.unitn.team04_rest.repository.TeamRepository;
+import mmarini.unitn.team04_rest.service.TeamService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,14 +15,16 @@ import java.util.List;
 @RequestMapping("/api")
 public class TeamController {
 
-    private final TeamRepository teamRepository;
+    public final TeamService teamService;
 
-    public TeamController(TeamRepository teamRepository) {
-        this.teamRepository = teamRepository;
+    @Autowired
+    public TeamController(TeamService teamService) {
+        this.teamService = teamService;
     }
+
 
     @GetMapping("/teams")
     public List<Team> getAllTeams() {
-        return teamRepository.findAll();
+        return teamService.getAllTeams();
     }
 }
